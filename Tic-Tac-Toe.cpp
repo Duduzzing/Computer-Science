@@ -2,14 +2,15 @@
 #include <stdafx.h>
 #include <iostream>
 #include <string>
+#include <vector>
+#include <ctime>
 
 using namespace std;
 
 int playerOneScore = 0;
-int playerTwoScore = 0;
-int computerScore = 0;
+int playerTwoScore = 0; //computer's score too
 int whosTurn = 0; //0 = player1, 1 = player2 or com
-bool isPvp = false;
+bool isPvp = true;
 
 
 void showOption();
@@ -64,15 +65,15 @@ void updateGrid() {
 	system("cls");
 
 	string str1;
-	string oppoName = (isPvp) ? "Computer" : "Player2 ";
+	string oppoName = (isPvp) ? "Player2 " : "Computer";
 
 	if (whosTurn == 0) {
 		str1 = "Player1";
 	}
 	else {
-		str1 = (isPvp) ? "Computer" : "Player2";
+		str1 = (isPvp) ? "Player2 " : "Computer";
 	}
-	
+
 	str1 += "'s turn.";
 
 	cout << "Tic-Tac-Toe Game\n\n"
@@ -112,18 +113,18 @@ bool isOneToNine(char num) {
 
 
 NumberBox* getNumberBoxByValue(char value){
-if(one.getValue() == value) return &one;
-if(two.getValue() == value) return &two;
-if(three.getValue() == value) return &three;
-if(four.getValue() == value) return &four;
-if(five.getValue() == value) return &five;
-if(six.getValue() == value) return &six;
-if(seven.getValue() == value) return &seven;
-if(eight.getValue() == value) return &eight;
-if(nine.getValue() == value) return &nine;
- NumberBox a('a');
- a.setOqupied(true);
- return &a; //Memory leak?
+	if (one.getValue() == value) return &one;
+	if (two.getValue() == value) return &two;
+	if (three.getValue() == value) return &three;
+	if (four.getValue() == value) return &four;
+	if (five.getValue() == value) return &five;
+	if (six.getValue() == value) return &six;
+	if (seven.getValue() == value) return &seven;
+	if (eight.getValue() == value) return &eight;
+	if (nine.getValue() == value) return &nine;
+	NumberBox a('a');
+	a.setOqupied(true);
+	return &a; //Memory leak?
 }
 
 
@@ -164,13 +165,13 @@ char win() {
 		(_three == X && _five == X && _seven == X)) {
 		return 'X'; //X won
 	}
-	if ((_one == O && _two == O && _three == O )||
-		(_four == O && _five == O && _six == O )||
-		(_seven == O && _eight == O && _nine == O )||
-		(_one == O && _four == O && _seven == O )||
-		(_two == O && _five == O && _eight == O )||
+	if ((_one == O && _two == O && _three == O) ||
+		(_four == O && _five == O && _six == O) ||
+		(_seven == O && _eight == O && _nine == O) ||
+		(_one == O && _four == O && _seven == O) ||
+		(_two == O && _five == O && _eight == O) ||
 		(_three == O && _six == O && _nine == O) ||
-		(_one == O && _five == O && _nine == O )||
+		(_one == O && _five == O && _nine == O) ||
 		(_three == O && _five == O && _seven == O)) {
 		return 'O'; //O won
 	}
@@ -217,10 +218,22 @@ void pvpPlay() {
 
 				break;
 			}
-
-			if (result == 'X') {
+			if (result == 'O') {
 
 				playerOneScore++;
+
+				updateGrid();
+
+				cout << "----O Won!!!----\n" << endl;
+
+				showOption();
+				//todo offer another game
+
+				break;
+			}
+			else if (result == 'X') {
+
+				playerTwoScore++;
 
 				updateGrid();
 
@@ -232,23 +245,6 @@ void pvpPlay() {
 				break;
 
 			}
-			else if (result == 'O') {
-
-				playerTwoScore++;
-
-				updateGrid();
-
-				cout << "----O Won!!!----\n" << endl;
-
-				showOption();
-				//todo offer another game
-
-				break;
-
-			}
-
-		}
-		else {
 
 		}
 
@@ -261,10 +257,15 @@ void pvpPlay() {
 
 void pvpOrCom() {
 
+	system("cls");
+
 	cout << "Tic-Tac-Toe Game\n\n"
 		<< "What would you like to play?\n\n"
 		<< "  PVP (1)    |    Computer (2)\n\n";
 
+	srand(time(NULL));
+
+	whosTurn = rand() % 2;
 
 	while (true) {
 		int input;
@@ -282,12 +283,10 @@ void pvpOrCom() {
 		}
 		else if (input == 2) {
 			isPvp = false;
-			cout << "nothing yet :)" << endl;
+			cout << "Comming SOON! :)" << endl;
 			break;
 		}
-		else {
 
-		}
 	}
 
 }
@@ -300,8 +299,34 @@ void reset(bool isRestart) {
 	if (isRestart) {
 		playerOneScore = 0;
 		playerTwoScore = 0;
-		computerScore = 0;
 	}
+
+	one.setValue('1');
+	one.setOqupied(false);
+
+	two.setValue('2');
+	two.setOqupied(false);
+
+	three.setValue('3');
+	three.setOqupied(false);
+
+	four.setValue('4');
+	four.setOqupied(false);
+
+	five.setValue('5');
+	five.setOqupied(false);
+
+	six.setValue('6');
+	six.setOqupied(false);
+
+	seven.setValue('7');
+	seven.setOqupied(false);
+
+	eight.setValue('8');
+	eight.setOqupied(false);
+
+	nine.setValue('9');
+	nine.setOqupied(false);
 
 	whosTurn = 0;
 
@@ -319,23 +344,173 @@ void showOption() {
 
 	if (input == 1) {
 		reset(false);
+		updateGrid();
 		pvpPlay();
 	}
 	else if (input == 2) {
 		reset(true);
-		cout << "notehinf";
+		pvpOrCom();
 	}
-	cout <<"input:" <<input;
 
 }
+
+
+
+void pvcPlay(){
+	
+	char input;
+
+	while (true) {
+
+		if (whosTurn == 0){
+			cin >> input;
+
+			if (isOneToNine(input)) {
+
+				inputValue(input);
+
+				updateGrid();
+
+				char result = win();
+
+				if (result == 'D') {
+					cout << "----It's Draw!!!----\n" << endl;
+
+					showOption();
+
+					break;
+				}
+				if (result == 'O') {
+
+					playerOneScore++;
+
+					updateGrid();
+
+					cout << "----O Won!!!----\n" << endl;
+
+					showOption();
+
+					break;
+				}
+				else if (result == 'X') {
+
+					playerTwoScore++;
+
+					updateGrid();
+
+					cout << "----X Won!!!----\n" << endl;
+
+					showOption();
+
+					break;
+
+				}
+
+
+			}
+
+
+		}
+		//computer's turn
+		else{
+			//defence, attack
+			//Com is always 'X'
+
+			////////
+			//choose the places for defence
+
+			///////
+
+		}
+
+
+	}
+
+}
+
+
+NumberBox* findBoxForDefence(){
+	char _one = one.getValue();
+	char _two = two.getValue();
+	char _three = three.getValue();
+	char _four = four.getValue();
+	char _five = five.getValue();
+	char _six = six.getValue();
+	char _seven = seven.getValue();
+	char _eight = eight.getValue();
+	char _nine = nine.getValue();
+	char X = 'X';
+	char O = 'O';
+
+	NumberBox* onePointer = &one;
+	NumberBox* twoPointer = &two;
+	NumberBox* threePointer = &three;
+	NumberBox* fourPointer = &four;
+	NumberBox* fivePointer = &five;
+	NumberBox* sixPointer = &six;
+	NumberBox* sevenPointer = &seven;
+	NumberBox* eightPointer = &eight;
+	NumberBox* ninePointer = &nine;
+
+	//row
+	if (_one == O && _two == O){
+		return threePointer;
+	}
+	if (_two == O && _three == O){
+		return onePointer;
+	}
+	if (_four == O && _five == O){
+		return sixPointer;
+	}
+	if (_five == O && _six == O){
+		return fourPointer;
+	}
+	if (_seven == O && _eight == O){
+		return ninePointer;
+	}
+	if (_eight == O && _nine == O){
+		return sevenPointer;
+	}
+
+	//column
+	if (_one == O && _four == O){
+		return sevenPointer;
+	}
+	if (_four == O && _seven == O){
+		return onePointer;
+	}
+	if (_two == O && _five == O){
+		return eightPointer;
+	}
+	if (_five == O && _eight == O){
+		return twoPointer;
+	}
+	if (_three == O && _six == O){
+		return ninePointer;
+	}
+	if (_six == O && _nine == O){
+		return threePointer;
+	}
+
+
+
+
+
+}
+
+
+
+
+
+
+
 
 int main()
 {
 
 	pvpOrCom();
 
-
+	return 0;
 
 }
-
 

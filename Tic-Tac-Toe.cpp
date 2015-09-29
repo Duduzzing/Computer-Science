@@ -1,5 +1,4 @@
 
-
 #include <iostream>
 #include <string>
 
@@ -15,10 +14,14 @@ int whosTurn = 0; //0 = player1, 1 = player2 or com
 class NumberBox{
     
     public:
+        
+    char value;
+    bool isBoxOqupied;
+    
     NumberBox(char _value){
         
         value = _value;
-        isOqupied = false;
+        isBoxOqupied = false;
         
     }
     
@@ -27,18 +30,17 @@ class NumberBox{
     char getValue(){
         return value;
     }
+    bool isOqupied(){
+        return isBoxOqupied;
+    }
     
     void setValue(char v){
         value = v;
     }
-    void setOpuqied(bool o){
-        isOqupied = o;
+    void setOqupied(bool o){
+        isBoxOqupied = o;
     }
     
-    
-    private:
-    char value;
-    bool isOqupied;
     
 };
 
@@ -62,7 +64,7 @@ void updateGrid(){
     << "| " << one.getValue() << " | " << two.getValue() << " | " << three.getValue() << " |\n"
     << "+---+---+---+\n"
     << "| " << four.getValue() << " | " << five.getValue() << " | " << six.getValue() << " |\n"
-    << "+---+---+---+n"
+    << "+---+---+---+\n"
     << "| " << seven.getValue() << " | " << eight.getValue() << " | " << nine.getValue() << " |\n"
     << "+---+---+---+\n"
     << "\n"
@@ -215,6 +217,8 @@ void pvpPlay(){
                 
                 cout << "X Won!!!" << endl;
                 
+                //todo offer another game
+                
                 break;
                 
                 } else if(win() == 'O'){
@@ -224,6 +228,8 @@ void pvpPlay(){
                 updateGrid();
                 
                 cout << "O Won!!!" << endl;
+                
+                //todo offer another game
                 
                 break;
                 
@@ -247,3 +253,6 @@ int main()
     pvpPlay();
     
 }
+
+
+

@@ -31,7 +31,7 @@ class NumberBox{
     void setValue(char v){
         value = v;
     }
-    void setIsOpuqied(bool o){
+    void setOpuqied(bool o){
         isOqupied = o;
     }
     
@@ -158,22 +158,54 @@ void pvpPlay(){
         cin >> input;
         
         if( isOneToNine(input) ){
-            
-            char value = input;
-            
-            if(one.getValue() == value) one.setValue(symbol);
-            if(two.getValue() == value) two.setValue(symbol);
-            if(three.getValue() == value) three.setValue(symbol);
-            if(four.getValue() == value) four.setValue(symbol);
-            if(five.getValue() == value) five.setValue(symbol);
-            if(six.getValue() == value) six.setValue(symbol);
-            if(seven.getValue() == value) seven.setValue(symbol);
-            if(eight.getValue() == value) eight.setValue(symbol);
-            if(nine.getValue() == value) nine.setValue(symbol);
+        
+            if(one.getValue() == input && !one.isOqupied()){
+                one.setValue(symbol);
+                one.setOqupied(true);
+                whosTurn = (whosTurn == 0 )? 1 : 0;
+            }
+            if(two.getValue() == input && !two.isOqupied()){ 
+                two.setValue(symbol);
+                two.setOqupied(true);
+                whosTurn = (whosTurn == 0 )? 1 : 0;
+            }
+            if(three.getValue() == input && !three.isOqupied()){
+                three.setValue(symbol);
+                three.setOqupied(true);
+                whosTurn = (whosTurn == 0 )? 1 : 0;
+            }
+            if(four.getValue() == input && !four.isOqupied()){
+                four.setValue(symbol);
+                four.setOqupied(true);
+                whosTurn = (whosTurn == 0 )? 1 : 0;
+            }
+            if(five.getValue() == input && !five.isOqupied()){ 
+                five.setValue(symbol);
+                five.setOqupied(true);
+                whosTurn = (whosTurn == 0 )? 1 : 0;
+            }
+            if(six.getValue() == input && !six.isOqupied()){ 
+                six.setValue(symbol);
+                six.setOqupied(true);
+                whosTurn = (whosTurn == 0 )? 1 : 0;
+            }
+            if(seven.getValue() == input && !seven.isOqupied()){ 
+                seven.setValue(symbol);
+                seven.setOqupied(true);
+                whosTurn = (whosTurn == 0 )? 1 : 0;
+            }
+            if(eight.getValue() == input && !eight.isOqupied()){ 
+                eight.setValue(symbol);
+                eight.setOqupied(true);
+                whosTurn = (whosTurn == 0 )? 1 : 0;
+            }
+            if(nine.getValue() == input && !nine.isOqupied()){ 
+                nine.setValue(symbol);
+                nine.setOqupied(true);
+                whosTurn = (whosTurn == 0 )? 1 : 0;
+            }
             
             updateGrid();
-            
-            whosTurn = (whosTurn == 0 )? 1 : 0;
             
             if(win() == 'X'){
                 

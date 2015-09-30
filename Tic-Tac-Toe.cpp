@@ -123,11 +123,11 @@ bool isOneToNineInt(char num) {
 	if (num != 1 &&
 		num != 2 &&
 		num != 3 &&
-		num != 4&&
-		num != 5&&
-		num != 6&&
-		num != 7&&
-		num != 8&&
+		num != 4 &&
+		num != 5 &&
+		num != 6 &&
+		num != 7 &&
+		num != 8 &&
 		num != 9) {
 		return false;
 	}
@@ -207,7 +207,7 @@ void inputValue(char input) {
 
 	NumberBox* box = getNumberBoxByValue(input);
 
-	if (box->getValue() == input && !box->isOqupied()) {
+	if (box->isOqupied() == false) {
 		box->setValue(symbol);
 		box->setOqupied(true);
 		whosTurn = (whosTurn == 0) ? 1 : 0;
@@ -325,8 +325,8 @@ void reset(bool isRestart) {
 		playerOneScore = 0;
 		playerTwoScore = 0;
 
-	one.setValue('1');
-	one.setOqupied(false);
+		one.setValue('1');
+		one.setOqupied(false);
 
 	}
 	two.setValue('2');
@@ -397,10 +397,10 @@ void showOption() {
 			winner = (isPvp) ? "Player2 WIN" : "Computer WIN";
 		}
 		cout << "@@@@@@@@@@@@@@@@@@@@\n"
-				 << "\n"
-				 << "    "<< winner<<"\n" 
-				 << "\n"
-				 << "@@@@@@@@@@@@@@@@@@@@\n\n";
+			<< "\n"
+			<< "    " << winner << "\n"
+			<< "\n"
+			<< "@@@@@@@@@@@@@@@@@@@@\n\n";
 	}
 
 }
@@ -643,9 +643,9 @@ void comAI() {
 			haveUsedTurn = true;
 		}
 	}
-	if (_one == X && _nine == X) {
-		if (!three.isOqupied()) {
-			theBox = threePointer;
+	if (_seven == X && _nine == X) {
+		if (!eight.isOqupied()) {
+			theBox = eightPointer;
 			haveUsedTurn = true;
 		}
 	}
@@ -865,8 +865,6 @@ void comAI() {
 		return;
 	}
 
-	int count = 0;
-
 	vector<int> ava;
 
 	for (int a = 1; a <= 5; a++) {
@@ -878,27 +876,22 @@ void comAI() {
 		}
 	}
 
-	while (true) {
+	if (ava.size() > 0){
 
 		int random = rand() % ava.size();
-		//random = random * 2 - 1;
 
 		theBox = getBoxByIndex(ava[random]);
 
-		if (theBox->isOqupied() == false) {
-			theBox->setValue(symbol);
-			theBox->setOqupied(true);
-			break;
-		}
-
-		theBox = getRandomBox();
 		theBox->setValue(symbol);
 		theBox->setOqupied(true);
-		break;
+		return;
 
-		count++;
 	}
-	
+
+	theBox = getRandomBox();
+	theBox->setValue(symbol);
+	theBox->setOqupied(true);
+
 }
 
 
@@ -932,8 +925,8 @@ NumberBox* getRandomBox() {
 		if (theBox->isOqupied() == false) {
 			return theBox;
 		}
-		
-		ava.erase(ava.begin()+random);
+
+		ava.erase(ava.begin() + random);
 
 	}
 }
@@ -944,7 +937,7 @@ NumberBox* getRandomBox() {
 
 int main()
 {
-	
+
 	pvpOrCom();
 
 	return 0;

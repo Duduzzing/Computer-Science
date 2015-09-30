@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <ctime>
+#include <windows.h>
 
 using namespace std;
 
@@ -14,6 +15,9 @@ bool isPvp = true;
 
 
 void showOption();
+void pvcPlay();
+void pvpPlay();
+
 
 class NumberBox {
 
@@ -48,6 +52,10 @@ public:
 
 };
 
+void comAI();
+NumberBox* getBoxByIndex(int index);
+NumberBox* getRandomBox();
+
 
 NumberBox one('1');
 NumberBox two('2');
@@ -63,6 +71,8 @@ NumberBox nine('9');
 
 void updateGrid() {
 	system("cls");
+
+	cout << "whosturn: " << whosTurn << endl;
 
 	string str1;
 	string oppoName = (isPvp) ? "Player2 " : "Computer";
@@ -109,10 +119,23 @@ bool isOneToNine(char num) {
 	}
 	return true;
 }
+bool isOneToNineInt(char num) {
+	if (num != 1 &&
+		num != 2 &&
+		num != 3 &&
+		num != 4&&
+		num != 5&&
+		num != 6&&
+		num != 7&&
+		num != 8&&
+		num != 9) {
+		return false;
+	}
+	return true;
+}
 
 
-
-NumberBox* getNumberBoxByValue(char value){
+NumberBox* getNumberBoxByValue(char value) {
 	if (one.getValue() == value) return &one;
 	if (two.getValue() == value) return &two;
 	if (three.getValue() == value) return &three;
@@ -122,9 +145,7 @@ NumberBox* getNumberBoxByValue(char value){
 	if (seven.getValue() == value) return &seven;
 	if (eight.getValue() == value) return &eight;
 	if (nine.getValue() == value) return &nine;
-	NumberBox a('a');
-	a.setOqupied(true);
-	return &a; //Memory leak?
+	throw "Invalid Vlaue!!";
 }
 
 
@@ -283,7 +304,11 @@ void pvpOrCom() {
 		}
 		else if (input == 2) {
 			isPvp = false;
-			cout << "Comming SOON! :)" << endl;
+
+			updateGrid();
+
+			pvcPlay();
+
 			break;
 		}
 
@@ -299,11 +324,11 @@ void reset(bool isRestart) {
 	if (isRestart) {
 		playerOneScore = 0;
 		playerTwoScore = 0;
-	}
 
 	one.setValue('1');
 	one.setOqupied(false);
 
+	}
 	two.setValue('2');
 	two.setOqupied(false);
 
@@ -345,91 +370,164 @@ void showOption() {
 	if (input == 1) {
 		reset(false);
 		updateGrid();
-		pvpPlay();
+		if (isPvp) {
+			pvpPlay();
+		}
+		else {
+			pvcPlay();
+		}
 	}
 	else if (input == 2) {
 		reset(true);
 		pvpOrCom();
 	}
+	else {
+		system("cls");
 
-}
+		string winner;
 
-
-
-void pvcPlay(){
-	
-	char input;
-
-	while (true) {
-
-		if (whosTurn == 0){
-			cin >> input;
-
-			if (isOneToNine(input)) {
-
-				inputValue(input);
-
-				updateGrid();
-
-				char result = win();
-
-				if (result == 'D') {
-					cout << "----It's Draw!!!----\n" << endl;
-
-					showOption();
-
-					break;
-				}
-				if (result == 'O') {
-
-					playerOneScore++;
-
-					updateGrid();
-
-					cout << "----O Won!!!----\n" << endl;
-
-					showOption();
-
-					break;
-				}
-				else if (result == 'X') {
-
-					playerTwoScore++;
-
-					updateGrid();
-
-					cout << "----X Won!!!----\n" << endl;
-
-					showOption();
-
-					break;
-
-				}
-
-
-			}
-
+		if (playerOneScore == playerTwoScore) {
+			winner = "DRAW";
 
 		}
-		//computer's turn
-		else{
-			//defence, attack
-			//Com is always 'X'
-
-			////////
-			//choose the places for defence
-
-			///////
-
+		else if (playerOneScore > playerTwoScore) {
+			winner = "Player1 WIN";
 		}
-
-
+		else {
+			winner = (isPvp) ? "Player2 WIN" : "Computer WIN";
+		}
+		cout << "@@@@@@@@@@@@@@@@@@@@\n"
+				 << "\n"
+				 << "    "<< winner<<"\n" 
+				 << "\n"
+				 << "@@@@@@@@@@@@@@@@@@@@\n\n";
 	}
 
 }
 
 
-NumberBox* findBoxForDefence(){
+
+void pvcPlay() {
+
+	int input;
+
+	while (true) {
+
+		if (whosTurn == 0) {
+
+			while (true) {
+
+				cin >> input;
+
+				if (isOneToNineInt(input)) {
+
+					char symbol = (whosTurn == 0) ? 'O' : 'X';
+
+					NumberBox* box = getBoxByIndex(input);
+
+					if (box->isOqupied() == false) {
+						box->setValue(symbol);
+						box->setOqupied(true);
+						whosTurn = (whosTurn == 0) ? 1 : 0;
+
+						break;
+					}
+				}
+			}
+
+			updateGrid();
+
+			char result = win();
+
+			if (result == 'D') {
+				cout << "----It's Draw!!!----\n" << endl;
+
+				showOption();
+
+				break;
+			}
+			if (result == 'O') {
+
+				playerOneScore++;
+
+				updateGrid();
+
+				cout << "----O Won!!!----\n" << endl;
+
+				showOption();
+
+				break;
+			}
+			else if (result == 'X') {
+
+				playerTwoScore++;
+
+				updateGrid();
+
+				cout << "----X Won!!!----\n" << endl;
+
+				showOption();
+
+				break;
+			}
+
+		}
+		//computer's turn
+		else {
+			//defence, attack
+			//Com is always 'X'
+
+			Sleep(1000);
+
+			comAI();
+
+			updateGrid();
+
+			char result = win();
+
+			if (result == 'D') {
+				cout << "----It's Draw!!!----\n" << endl;
+
+				showOption();
+
+				break;
+			}
+			if (result == 'O') {
+
+				playerOneScore++;
+
+				updateGrid();
+
+				cout << "----O Won!!!----\n" << endl;
+
+				showOption();
+
+				break;
+			}
+			else if (result == 'X') {
+
+				playerTwoScore++;
+
+				updateGrid();
+
+				cout << "----X Won!!!----\n" << endl;
+
+				showOption();
+
+				break;
+
+			}
+
+			whosTurn = (whosTurn == 0) ? 1 : 0;
+		}
+
+		updateGrid();
+	}
+
+}
+
+
+void comAI() {
 	char _one = one.getValue();
 	char _two = two.getValue();
 	char _three = three.getValue();
@@ -452,54 +550,393 @@ NumberBox* findBoxForDefence(){
 	NumberBox* eightPointer = &eight;
 	NumberBox* ninePointer = &nine;
 
+	NumberBox* theBox = &one;
+	bool haveUsedTurn = false;
+	char symbol = 'X';
+
+	//attack conditions
+	//only check it's one move before winnig
+
+	//cross
+	if (_one == X && _five == X) {
+		if (!nine.isOqupied()) {
+			theBox = ninePointer;
+			haveUsedTurn = true;
+		}
+	}
+	if (_five == X && _nine == X) {
+		if (!one.isOqupied()) {
+			theBox = onePointer;
+			haveUsedTurn = true;
+		}
+	}
+	if (_one == X && _nine == X) {
+		if (!five.isOqupied()) {
+			theBox = fivePointer;
+			haveUsedTurn = true;
+		}
+	}
+	if (_three == X && _five == X) {
+		if (!seven.isOqupied()) {
+			theBox = sevenPointer;
+			haveUsedTurn = true;
+		}
+	}
+	if (_five == X && _seven == X) {
+		if (!three.isOqupied()) {
+			theBox = threePointer;
+			haveUsedTurn = true;
+		}
+	}
+	if (_three == X && _seven == X) {
+		if (!five.isOqupied()) {
+			theBox = fivePointer;
+			haveUsedTurn = true;
+		}
+	}
 	//row
-	if (_one == O && _two == O){
-		return threePointer;
+	if (_one == X && _two == X) {
+		if (!three.isOqupied()) {
+			theBox = threePointer;
+			haveUsedTurn = true;
+		}
 	}
-	if (_two == O && _three == O){
-		return onePointer;
+	if (_two == X && _three == X) {
+		if (!one.isOqupied()) {
+			theBox = onePointer;
+			haveUsedTurn = true;
+		}
 	}
-	if (_four == O && _five == O){
-		return sixPointer;
+	if (_one == X && _three == X) {
+		if (!two.isOqupied()) {
+			theBox = twoPointer;
+			haveUsedTurn = true;
+		}
 	}
-	if (_five == O && _six == O){
-		return fourPointer;
+	if (_four == X && _five == X) {
+		if (!six.isOqupied()) {
+			theBox = sixPointer;
+			haveUsedTurn = true;
+		}
 	}
-	if (_seven == O && _eight == O){
-		return ninePointer;
+	if (_five == X && _six == X) {
+		if (!four.isOqupied()) {
+			theBox = fourPointer;
+			haveUsedTurn = true;
+		}
 	}
-	if (_eight == O && _nine == O){
-		return sevenPointer;
+	if (_four == X && _six == X) {
+		if (!five.isOqupied()) {
+			theBox = fivePointer;
+			haveUsedTurn = true;
+		}
 	}
-
+	if (_seven == X && _eight == X) {
+		if (!nine.isOqupied()) {
+			theBox = ninePointer;
+			haveUsedTurn = true;
+		}
+	}
+	if (_eight == X && _nine == X) {
+		if (!seven.isOqupied()) {
+			theBox = sevenPointer;
+			haveUsedTurn = true;
+		}
+	}
+	if (_one == X && _nine == X) {
+		if (!three.isOqupied()) {
+			theBox = threePointer;
+			haveUsedTurn = true;
+		}
+	}
 	//column
-	if (_one == O && _four == O){
-		return sevenPointer;
+	if (_one == X && _four == X) {
+		if (!seven.isOqupied()) {
+			theBox = sevenPointer;
+			haveUsedTurn = true;
+		}
 	}
-	if (_four == O && _seven == O){
-		return onePointer;
+	if (_four == X && _seven == X) {
+		if (!one.isOqupied()) {
+			theBox = onePointer;
+			haveUsedTurn = true;
+		}
 	}
-	if (_two == O && _five == O){
-		return eightPointer;
+	if (_one == X && _seven == X) {
+		if (!four.isOqupied()) {
+			theBox = fourPointer;
+			haveUsedTurn = true;
+		}
 	}
-	if (_five == O && _eight == O){
-		return twoPointer;
+	if (_two == X && _five == X) {
+		if (!eight.isOqupied()) {
+			theBox = eightPointer;
+			haveUsedTurn = true;
+		}
 	}
-	if (_three == O && _six == O){
-		return ninePointer;
+	if (_five == X && _eight == X) {
+		if (!two.isOqupied()) {
+			theBox = twoPointer;
+			haveUsedTurn = true;
+		}
 	}
-	if (_six == O && _nine == O){
-		return threePointer;
+	if (_two == X && _eight == X) {
+		if (!five.isOqupied()) {
+			theBox = fivePointer;
+			haveUsedTurn = true;
+		}
+	}
+	if (_three == X && _six == X) {
+		if (!nine.isOqupied()) {
+			theBox = ninePointer;
+			haveUsedTurn = true;
+		}
+	}
+	if (_six == X && _nine == X) {
+		if (!three.isOqupied()) {
+			theBox = threePointer;
+			haveUsedTurn = true;
+		}
+	}
+	if (_three == X && _nine == X) {
+		if (!six.isOqupied()) {
+			theBox = sixPointer;
+			haveUsedTurn = true;
+		}
 	}
 
 
 
+	//defence conditions
 
+	if (haveUsedTurn == false) {
+		//cross
+		if (_one == O && _five == O) {
+			if (!nine.isOqupied()) {
+				theBox = ninePointer;
+				haveUsedTurn = true;
+			}
+		}
+		if (_five == O && _nine == O) {
+			if (!one.isOqupied()) {
+				theBox = onePointer;
+				haveUsedTurn = true;
+			}
+		}
+		if (_one == O && _nine == O) {
+			if (!five.isOqupied()) {
+				theBox = fivePointer;
+				haveUsedTurn = true;
+			}
+		}
+		if (_three == O && _five == O) {
+			if (!seven.isOqupied()) {
+				theBox = sevenPointer;
+				haveUsedTurn = true;
+			}
+		}
+		if (_five == O && _seven == O) {
+			if (!three.isOqupied()) {
+				theBox = threePointer;
+				haveUsedTurn = true;
+			}
+		}
+		if (_three == O && _seven == O) {
+			if (!five.isOqupied()) {
+				theBox = fivePointer;
+				haveUsedTurn = true;
+			}
+		}
+		//row
+		if (_one == O && _two == O) {
+			if (!three.isOqupied()) {
+				theBox = threePointer;
+				haveUsedTurn = true;
+			}
+		}
+		if (_two == O && _three == O) {
+			if (!one.isOqupied()) {
+				theBox = onePointer;
+				haveUsedTurn = true;
+			}
+		}
+		if (_one == O && _three == O) {
+			if (!two.isOqupied()) {
+				theBox = twoPointer;
+				haveUsedTurn = true;
+			}
+		}
+		if (_four == O && _five == O) {
+			if (!six.isOqupied()) {
+				theBox = sixPointer;
+				haveUsedTurn = true;
+			}
+		}
+		if (_five == O && _six == O) {
+			if (!four.isOqupied()) {
+				theBox = fourPointer;
+				haveUsedTurn = true;
+			}
+		}
+		if (_four == O && _six == O) {
+			if (!five.isOqupied()) {
+				theBox = fivePointer;
+				haveUsedTurn = true;
+			}
+		}
+		if (_seven == O && _eight == O) {
+			if (!nine.isOqupied()) {
+				theBox = ninePointer;
+				haveUsedTurn = true;
+			}
+		}
+		if (_eight == O && _nine == O) {
+			if (!seven.isOqupied()) {
+				theBox = sevenPointer;
+				haveUsedTurn = true;
+			}
+		}
+		if (_one == O && _nine == O) {
+			if (!three.isOqupied()) {
+				theBox = threePointer;
+				haveUsedTurn = true;
+			}
+		}
+		//column
+		if (_one == O && _four == O) {
+			if (!seven.isOqupied()) {
+				theBox = sevenPointer;
+				haveUsedTurn = true;
+			}
+		}
+		if (_four == O && _seven == O) {
+			if (!one.isOqupied()) {
+				theBox = onePointer;
+				haveUsedTurn = true;
+			}
+		}
+		if (_one == O && _seven == O) {
+			if (!four.isOqupied()) {
+				theBox = fourPointer;
+				haveUsedTurn = true;
+			}
+		}
+		if (_two == O && _five == O) {
+			if (!eight.isOqupied()) {
+				theBox = eightPointer;
+				haveUsedTurn = true;
+			}
+		}
+		if (_five == O && _eight == O) {
+			if (!two.isOqupied()) {
+				theBox = twoPointer;
+				haveUsedTurn = true;
+			}
+		}
+		if (_two == O && _eight == O) {
+			if (!five.isOqupied()) {
+				theBox = fivePointer;
+				haveUsedTurn = true;
+			}
+		}
+		if (_three == O && _six == O) {
+			if (!nine.isOqupied()) {
+				theBox = ninePointer;
+				haveUsedTurn = true;
+			}
+		}
+		if (_six == O && _nine == O) {
+			if (!three.isOqupied()) {
+				theBox = threePointer;
+				haveUsedTurn = true;
+			}
+		}
+		if (_three == O && _nine == O) {
+			if (!six.isOqupied()) {
+				theBox = sixPointer;
+				haveUsedTurn = true;
+			}
+		}
+	}
 
+	if (haveUsedTurn) {
+		theBox->setValue(symbol);
+		theBox->setOqupied(true);
+		return;
+	}
+
+	int count = 0;
+
+	vector<int> ava;
+
+	for (int a = 1; a <= 5; a++) {
+
+		int b = a * 2 - 1;
+
+		if (getBoxByIndex(b)->isOqupied() == false) {
+			ava.push_back(b);
+		}
+	}
+
+	while (true) {
+
+		int random = rand() % ava.size();
+		//random = random * 2 - 1;
+
+		theBox = getBoxByIndex(ava[random]);
+
+		if (theBox->isOqupied() == false) {
+			theBox->setValue(symbol);
+			theBox->setOqupied(true);
+			break;
+		}
+
+		theBox = getRandomBox();
+		theBox->setValue(symbol);
+		theBox->setOqupied(true);
+		break;
+
+		count++;
+	}
+	
 }
 
 
+NumberBox* getBoxByIndex(int index) {
+	if (index == 1) return &one;
+	if (index == 2) return &two;
+	if (index == 3) return &three;
+	if (index == 4) return &four;
+	if (index == 5) return &five;
+	if (index == 6) return &six;
+	if (index == 7) return &seven;
+	if (index == 8) return &eight;
+	if (index == 9) return &nine;
+	throw "Index have to be 1 ~ 9";
+}
 
+NumberBox* getRandomBox() {
+	vector<int> ava;
+
+	for (int a = 1; a < 10; a++) {
+		if (getBoxByIndex(a)->isOqupied() == false) {
+			ava.push_back(a);
+		}
+	}
+
+	while (true) {
+		int random = ava[rand() % ava.size()];
+
+		NumberBox* theBox = getBoxByIndex(random);
+
+		if (theBox->isOqupied() == false) {
+			return theBox;
+		}
+		
+		ava.erase(ava.begin()+random);
+
+	}
+}
 
 
 
@@ -507,7 +944,7 @@ NumberBox* findBoxForDefence(){
 
 int main()
 {
-
+	
 	pvpOrCom();
 
 	return 0;

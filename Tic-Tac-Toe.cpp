@@ -24,12 +24,10 @@ class NumberBox {
 public:
 
 	char value;
-	bool isBoxOqupied;
 
 	NumberBox(char _value) {
 
 		value = _value;
-		isBoxOqupied = false;
 
 	}
 
@@ -39,16 +37,12 @@ public:
 		return value;
 	}
 	bool isOqupied() {
-		return isBoxOqupied;
+		return (value == 'X' || value == 'O') ? true : false;
 	}
 
 	void setValue(char v) {
 		value = v;
 	}
-	void setOqupied(bool o) {
-		isBoxOqupied = o;
-	}
-
 
 };
 
@@ -119,16 +113,9 @@ bool isOneToNine(char num) {
 	}
 	return true;
 }
-bool isOneToNineInt(char num) {
-	if (num != 1 &&
-		num != 2 &&
-		num != 3 &&
-		num != 4 &&
-		num != 5 &&
-		num != 6 &&
-		num != 7 &&
-		num != 8 &&
-		num != 9) {
+
+bool isOneToNineInt(int num) {
+	if (num > 0 && num < 10) {
 		return false;
 	}
 	return true;
@@ -145,10 +132,21 @@ NumberBox* getNumberBoxByValue(char value) {
 	if (seven.getValue() == value) return &seven;
 	if (eight.getValue() == value) return &eight;
 	if (nine.getValue() == value) return &nine;
-	throw "Invalid Vlaue!!";
+	throw "Invalid Value!!";
 }
 
-
+NumberBox* getNumberBoxByIndex(int index) {
+	if (index == 1) return &one;
+	if (index == 2) return &two;
+	if (index == 3) return &three;
+	if (index == 4) return &four;
+	if (index == 5) return &five;
+	if (index == 6) return &six;
+	if (index == 7) return &seven;
+	if (index == 8) return &eight;
+	if (index == 9) return &nine;
+	throw "Index have to be 1 ~ 9";
+}
 
 char win() {
 
@@ -202,14 +200,13 @@ char win() {
 }
 
 
-void inputValue(char input) {
+void inputValue(int input) {
 	char symbol = (whosTurn == 0) ? 'O' : 'X';
 
-	NumberBox* box = getNumberBoxByValue(input);
+	NumberBox* box = getNumberBoxByIndex(input);
 
 	if (box->isOqupied() == false) {
 		box->setValue(symbol);
-		box->setOqupied(true);
 		whosTurn = (whosTurn == 0) ? 1 : 0;
 	}
 
@@ -218,7 +215,7 @@ void inputValue(char input) {
 
 void pvpPlay() {
 
-	char input;
+	int input;
 
 	while (true) {
 
@@ -326,32 +323,22 @@ void reset(bool isRestart) {
 		playerTwoScore = 0;
 
 		one.setValue('1');
-		one.setOqupied(false);
-
 	}
 	two.setValue('2');
-	two.setOqupied(false);
 
 	three.setValue('3');
-	three.setOqupied(false);
 
 	four.setValue('4');
-	four.setOqupied(false);
 
 	five.setValue('5');
-	five.setOqupied(false);
 
 	six.setValue('6');
-	six.setOqupied(false);
 
 	seven.setValue('7');
-	seven.setOqupied(false);
 
 	eight.setValue('8');
-	eight.setOqupied(false);
 
 	nine.setValue('9');
-	nine.setOqupied(false);
 
 	whosTurn = 0;
 
@@ -427,7 +414,6 @@ void pvcPlay() {
 
 					if (box->isOqupied() == false) {
 						box->setValue(symbol);
-						box->setOqupied(true);
 						whosTurn = (whosTurn == 0) ? 1 : 0;
 
 						break;
@@ -861,7 +847,6 @@ void comAI() {
 
 	if (haveUsedTurn) {
 		theBox->setValue(symbol);
-		theBox->setOqupied(true);
 		return;
 	}
 
@@ -876,37 +861,22 @@ void comAI() {
 		}
 	}
 
-	if (ava.size() > 0){
+	if (ava.size() > 0) {
 
 		int random = rand() % ava.size();
 
 		theBox = getBoxByIndex(ava[random]);
 
 		theBox->setValue(symbol);
-		theBox->setOqupied(true);
 		return;
 
 	}
 
 	theBox = getRandomBox();
 	theBox->setValue(symbol);
-	theBox->setOqupied(true);
 
 }
 
-
-NumberBox* getBoxByIndex(int index) {
-	if (index == 1) return &one;
-	if (index == 2) return &two;
-	if (index == 3) return &three;
-	if (index == 4) return &four;
-	if (index == 5) return &five;
-	if (index == 6) return &six;
-	if (index == 7) return &seven;
-	if (index == 8) return &eight;
-	if (index == 9) return &nine;
-	throw "Index have to be 1 ~ 9";
-}
 
 NumberBox* getRandomBox() {
 	vector<int> ava;
@@ -943,4 +913,3 @@ int main()
 	return 0;
 
 }
-

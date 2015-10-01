@@ -47,7 +47,6 @@ public:
 };
 
 void comAI();
-NumberBox* getBoxByIndex(int index);
 NumberBox* getRandomBox();
 
 
@@ -99,41 +98,13 @@ void updateGrid() {
 }
 
 
-bool isOneToNine(char num) {
-	if (num != '1' &&
-		num != '2' &&
-		num != '3' &&
-		num != '4'&&
-		num != '5'&&
-		num != '6'&&
-		num != '7'&&
-		num != '8'&&
-		num != '9') {
-		return false;
-	}
-	return true;
-}
-
-bool isOneToNineInt(int num) {
+bool isOneToNine(int num) {
 	if (num > 0 && num < 10) {
-		return false;
+		return true;
 	}
-	return true;
+	return false;
 }
 
-
-NumberBox* getNumberBoxByValue(char value) {
-	if (one.getValue() == value) return &one;
-	if (two.getValue() == value) return &two;
-	if (three.getValue() == value) return &three;
-	if (four.getValue() == value) return &four;
-	if (five.getValue() == value) return &five;
-	if (six.getValue() == value) return &six;
-	if (seven.getValue() == value) return &seven;
-	if (eight.getValue() == value) return &eight;
-	if (nine.getValue() == value) return &nine;
-	throw "Invalid Value!!";
-}
 
 NumberBox* getNumberBoxByIndex(int index) {
 	if (index == 1) return &one;
@@ -245,7 +216,6 @@ void pvpPlay() {
 				cout << "----O Won!!!----\n" << endl;
 
 				showOption();
-				//todo offer another game
 
 				break;
 			}
@@ -258,7 +228,6 @@ void pvpPlay() {
 				cout << "----X Won!!!----\n" << endl;
 
 				showOption();
-				//todo offer another game
 
 				break;
 
@@ -321,9 +290,9 @@ void reset(bool isRestart) {
 	if (isRestart) {
 		playerOneScore = 0;
 		playerTwoScore = 0;
-
-		one.setValue('1');
 	}
+	one.setValue('1');
+	
 	two.setValue('2');
 
 	three.setValue('3');
@@ -406,14 +375,15 @@ void pvcPlay() {
 
 				cin >> input;
 
-				if (isOneToNineInt(input)) {
+				if (isOneToNine(input)) {
 
-					char symbol = (whosTurn == 0) ? 'O' : 'X';
+					char symbol ='O';
 
-					NumberBox* box = getBoxByIndex(input);
+					NumberBox* box = getNumberBoxByIndex(input);
 
 					if (box->isOqupied() == false) {
 						box->setValue(symbol);
+						
 						whosTurn = (whosTurn == 0) ? 1 : 0;
 
 						break;
@@ -421,41 +391,7 @@ void pvcPlay() {
 				}
 			}
 
-			updateGrid();
-
-			char result = win();
-
-			if (result == 'D') {
-				cout << "----It's Draw!!!----\n" << endl;
-
-				showOption();
-
-				break;
-			}
-			if (result == 'O') {
-
-				playerOneScore++;
-
-				updateGrid();
-
-				cout << "----O Won!!!----\n" << endl;
-
-				showOption();
-
-				break;
-			}
-			else if (result == 'X') {
-
-				playerTwoScore++;
-
-				updateGrid();
-
-				cout << "----X Won!!!----\n" << endl;
-
-				showOption();
-
-				break;
-			}
+			updateGrid();		
 
 		}
 		//computer's turn
@@ -469,42 +405,41 @@ void pvcPlay() {
 
 			updateGrid();
 
-			char result = win();
-
-			if (result == 'D') {
-				cout << "----It's Draw!!!----\n" << endl;
-
-				showOption();
-
-				break;
-			}
-			if (result == 'O') {
-
-				playerOneScore++;
-
-				updateGrid();
-
-				cout << "----O Won!!!----\n" << endl;
-
-				showOption();
-
-				break;
-			}
-			else if (result == 'X') {
-
-				playerTwoScore++;
-
-				updateGrid();
-
-				cout << "----X Won!!!----\n" << endl;
-
-				showOption();
-
-				break;
-
-			}
-
 			whosTurn = (whosTurn == 0) ? 1 : 0;
+		}
+
+		char result = win();
+
+		if (result == 'D') {
+			cout << "----It's Draw!!!----\n" << endl;
+
+			showOption();
+
+			break;
+		}
+		if (result == 'O') {
+
+			playerOneScore++;
+
+			updateGrid();
+
+			cout << "----O Won!!!----\n" << endl;
+
+			showOption();
+
+			break;
+		}
+		else if (result == 'X') {
+
+			playerTwoScore++;
+
+			updateGrid();
+
+			cout << "----X Won!!!----\n" << endl;
+
+			showOption();
+
+			break;
 		}
 
 		updateGrid();
@@ -692,7 +627,6 @@ void comAI() {
 	}
 
 
-
 	//defence conditions
 
 	if (haveUsedTurn == false) {
@@ -856,7 +790,7 @@ void comAI() {
 
 		int b = a * 2 - 1;
 
-		if (getBoxByIndex(b)->isOqupied() == false) {
+		if (getNumberBoxByIndex(b)->isOqupied() == false) {
 			ava.push_back(b);
 		}
 	}
@@ -865,9 +799,10 @@ void comAI() {
 
 		int random = rand() % ava.size();
 
-		theBox = getBoxByIndex(ava[random]);
+		theBox = getNumberBoxByIndex(ava[random]);
 
 		theBox->setValue(symbol);
+
 		return;
 
 	}
@@ -882,7 +817,7 @@ NumberBox* getRandomBox() {
 	vector<int> ava;
 
 	for (int a = 1; a < 10; a++) {
-		if (getBoxByIndex(a)->isOqupied() == false) {
+		if (getNumberBoxByIndex(a)->isOqupied() == false) {
 			ava.push_back(a);
 		}
 	}
@@ -890,7 +825,7 @@ NumberBox* getRandomBox() {
 	while (true) {
 		int random = ava[rand() % ava.size()];
 
-		NumberBox* theBox = getBoxByIndex(random);
+		NumberBox* theBox = getNumberBoxByIndex(random);
 
 		if (theBox->isOqupied() == false) {
 			return theBox;

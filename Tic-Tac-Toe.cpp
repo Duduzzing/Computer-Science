@@ -65,8 +65,6 @@ NumberBox nine('9');
 void updateGrid() {
 	system("cls");
 
-	cout << "whosturn: " << whosTurn << endl;
-
 	string str1;
 	string oppoName = (isPvp) ? "Player2 " : "Computer";
 
@@ -283,8 +281,6 @@ void pvpOrCom() {
 }
 
 
-
-
 void reset(bool isRestart) {
 
 	if (isRestart) {
@@ -308,10 +304,11 @@ void reset(bool isRestart) {
 	eight.setValue('8');
 
 	nine.setValue('9');
-
-	whosTurn = 0;
+	
+	whosTurn = rand() % 2;
 
 }
+
 
 void showOption() {
 
@@ -369,6 +366,8 @@ void pvcPlay() {
 
 	while (true) {
 
+		updateGrid();
+
 		if (whosTurn == 0) {
 
 			while (true) {
@@ -399,7 +398,7 @@ void pvcPlay() {
 			//defence, attack
 			//Com is always 'X'
 
-			Sleep(1000);
+			Sleep(1500);
 
 			comAI();
 
@@ -407,6 +406,8 @@ void pvcPlay() {
 
 			whosTurn = (whosTurn == 0) ? 1 : 0;
 		}
+
+		updateGrid();
 
 		char result = win();
 
@@ -442,7 +443,6 @@ void pvcPlay() {
 			break;
 		}
 
-		updateGrid();
 	}
 
 }
@@ -625,7 +625,6 @@ void comAI() {
 			haveUsedTurn = true;
 		}
 	}
-
 
 	//defence conditions
 

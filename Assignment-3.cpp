@@ -11,38 +11,38 @@ using namespace std;
 /*
 1. Write a C++ program that will print the following pattern
 
-******* 
-****** 
-***** 
-**** 
-*** 
-** 
+*******
+******
+*****
+****
+***
+**
 *
 2. Write a program that will print the following pattern:
-       1****** 
-       12***** 
-       123**** 
-       1234*** 
-       12345** 
-       123456* 
-       1234567 
+1******
+12*****
+123****
+1234***
+12345**
+123456*
+1234567
 
 3. Write a C++ program that will print the pattern as shown below:
 
-* 
-*** 
-***** 
-******* 
-********* 
-********* 
-******* 
-***** 
-*** 
+*
+***
+*****
+*******
+*********
+*********
+*******
+*****
+***
 *
 
 */
 
-void task1(){
+void task1() {
 
 	int howMany;
 
@@ -58,11 +58,11 @@ void task1(){
 
 	cin >> maxLength;
 
-	for (int c = 0; c < howMany; c++){
+	for (int c = 0; c < howMany; c++) {
 
-		for (int a = 0; a < maxLength; a++){
+		for (int a = 0; a < maxLength; a++) {
 
-			for (int b = 0; b <= a; b++){
+			for (int b = 0; b <= a; b++) {
 
 				cout << "*";
 			}
@@ -75,7 +75,7 @@ void task1(){
 
 }
 
-void task2(){
+void task2() {
 
 	int maxLength;
 
@@ -89,13 +89,13 @@ void task2(){
 	int numlength = 1;
 
 
-	for (int c = 0; c < maxLength; c++){
+	for (int c = 0; c < maxLength; c++) {
 
-		for (int b = 1; b <= numlength; b++){
+		for (int b = 1; b <= numlength; b++) {
 			cout << b;
 		}
 
-		for (int a = 1; a < starLength; a++){
+		for (int a = 1; a < starLength; a++) {
 			cout << "*";
 		}
 		cout << endl;
@@ -106,10 +106,10 @@ void task2(){
 		Sleep(200);
 
 	}
-	
+
 }
 
-void task3(){
+void task3() {
 
 	int howMany;
 
@@ -125,22 +125,30 @@ void task3(){
 
 	cin >> maxLength;
 
-	for (int a = 1; a <howMany; a++){
+	for (int a = 0; a < howMany; a++) {
 
-		cout << "*" << endl;
+		for (int b = 0; b <= maxLength; b++) {
 
-		for (int b = 1; b < a; b++){
-			cout << "**";
+			cout << "*";
+
+			for (int c = 0; c < b; c++) {
+				cout << "**";
+			}
+			cout << endl;
+
+			Sleep(100);
 		}
 
-		cout << endl;
+		for (int b = maxLength; b >= 0; b--) {
 
-		for (int b = 1; b < a; b++){
-			cout << "**";
+			cout << "*";
+
+			for (int c = 0; c < b; c++) {
+				cout << "**";
+			}
+			cout << endl;
+			Sleep(100);
 		}
-
-		cout << endl;
-
 	}
 
 
@@ -150,11 +158,10 @@ void task3(){
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	
-	//task1();
-	//task2();
+
+	task1();
+	task2();
 	task3();
 
 	return 0;
 }
-

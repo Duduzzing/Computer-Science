@@ -8,26 +8,26 @@
 using namespace std;
 
 /*
-		  Output:
-		  MENU
-		  1. Add
-		  2. Subtract
-		  3. Multiply
-		  4. Divide
-		  5. Modulus
-		  Enter your choice: 1
-		  Enter your two numbers: 12 15
-		  Result: 27
+Output:
+MENU
+1. Add
+2. Subtract
+3. Multiply
+4. Divide
+5. Modulus
+Enter your choice: 1
+Enter your two numbers: 12 15
+Result: 27
 
-		  Continue? 'y'
-		  else break!
+Continue? 'y'
+else break!
 */
 
 
 double calculate(int type, string X, string Y){
-	
+
 	if (type < 0 || type > 5){
-		throw "Invalid Type";
+		return 0;
 	}
 
 	double x = atof(X.c_str());
@@ -43,12 +43,12 @@ double calculate(int type, string X, string Y){
 
 	case 3:
 		return x * y;
-	
+
 	case 4:
 		return x / y;
-	
+
 	case 5:
-		return fmod(x,y);
+		return fmod(x, y);
 
 	}
 
@@ -56,8 +56,7 @@ double calculate(int type, string X, string Y){
 
 
 
-int _tmain(int argc, _TCHAR* argv[])
-{
+bool task1(){
 
 	string x, y;
 	int type;
@@ -69,20 +68,38 @@ int _tmain(int argc, _TCHAR* argv[])
 		"\n\t4. Divide"
 		"\n\t5. Modulus " << endl;
 
-	cout << "What operation do you want? ";
+	cout << "Enter the choice: ";
 
 	cin >> type;
 
-	cout << "\nFirst number: ";
+	cout << "\nEnter two numbers: ";
 
-	cin >> x;
+	cin >> x >> y;
 
-	cout << "\nSecond number: ";
+	cout << "Result: " << calculate(type, x, y) << endl;
 
-	cin >> y;
+	char again;
 
-	cout << calculate(type,x,y) << endl;
+	cout << "Continue? Enter 'y'" << endl;
+
+	cin >> again;
+
+	if (again == 'y') return true;
+	
+	return false;
+
+}
+
+
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+
+	while (task1()){
+
+		system("cls");
+
+	}
 
 	return 0;
 }
-

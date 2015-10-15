@@ -3,7 +3,6 @@
 #include <iostream>
 #include <algorithm>    // std::minmax
 #include <vector>
-#include <algorithm>
 
 using namespace std;
 

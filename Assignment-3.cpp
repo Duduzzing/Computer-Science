@@ -1,10 +1,10 @@
 
-#include "stdafx.h"
+//#include "stdafx.h"
 #include <iostream>
 #include <string>
 #include <vector>
 #include <ctime>
-#include <windows.h>
+//#include <windows.h>
 
 using namespace std;
 
@@ -44,21 +44,14 @@ using namespace std;
 
 void task1() {
 
-	int howMany;
-
 	int maxLength;
 
 	cout << "-----Task 1-----" << endl;
-
-	cout << "How many times do you want to reapeat: ";
-
-	cin >> howMany;
 
 	cout << "\nWhat is the max amount of the stars: ";
 
 	cin >> maxLength;
 
-	for (int c = 0; c < howMany; c++) {
 
 		for (int a = 0; a < maxLength; a++) {
 
@@ -69,9 +62,9 @@ void task1() {
 
 			cout << endl;
 
-			Sleep(200);
+		//	Sleep(200);
 		}
-	}
+	
 
 }
 
@@ -85,25 +78,18 @@ void task2() {
 
 	cin >> maxLength;
 
-	int starLength = maxLength;
-	int numlength = 1;
-
-
-	for (int c = 0; c < maxLength; c++) {
-
-		for (int b = 1; b <= numlength; b++) {
-			cout << b;
+	for (int c = 1; c <= maxLength; c++) {
+	    
+		for (int a = 1; a <= c; a++) {
+			cout << a;
 		}
 
-		for (int a = 1; a < starLength; a++) {
+		for (int b = maxLength; b > c; b--) {
 			cout << "*";
 		}
 		cout << endl;
 
-		starLength--;
-		numlength++;
-
-		Sleep(200);
+	//	Sleep(200);
 
 	}
 
@@ -111,52 +97,41 @@ void task2() {
 
 void task3() {
 
-	int howMany;
-
 	int maxLength;
 
 	cout << "\n\n-----Task 3-----" << endl;
-
-	cout << "How many times do you want to reapeat: ";
-
-	cin >> howMany;
 
 	cout << "\nWhat is the max amount of the stars: ";
 
 	cin >> maxLength;
 
-	for (int a = 0; a < howMany; a++) {
+	for (int b = 0; b <= maxLength; b++) {
 
-		for (int b = 0; b <= maxLength; b++) {
+		cout << "*";
 
-			cout << "*";
-
-			for (int c = 0; c < b; c++) {
-				cout << "**";
-			}
-			cout << endl;
-
-			Sleep(100);
+		for (int c = 0; c < b; c++) {
+			cout << "**";
 		}
+		cout << endl;
 
-		for (int b = maxLength; b >= 0; b--) {
-
-			cout << "*";
-
-			for (int c = 0; c < b; c++) {
-				cout << "**";
-			}
-			cout << endl;
-			Sleep(100);
-		}
+		//	Sleep(100);
 	}
 
+	for (int b = maxLength; b >= 0; b--) {
 
+		cout << "*";
+
+		for (int c = 0; c < b; c++) {
+			cout << "**";
+		}
+		cout << endl;
+	//	Sleep(100);
+	}
 
 }
 
 
-int _tmain(int argc, _TCHAR* argv[])
+int main()
 {
 
 	task1();

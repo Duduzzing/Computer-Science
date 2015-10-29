@@ -24,45 +24,85 @@ Decending:
 */
 
 
+int* sortArray(int arr[], int ARRAYSIZE){
+    
+    for(int b = 0; b < ARRAYSIZE; b++){
+        
+        for(int a = 0; a < ARRAYSIZE - 1; a++){
+            
+            int temp = arr[a];
+        
+            if(temp > arr[a+1]){
+         
+                arr[a] = arr[a+1];
+         
+                arr[a+1] = temp; 
+            
+            }
+        }
+    }
+    
+    return arr;
+}
+
+int* reverseArray(int arr[], int ARRAYSIZE){
+    
+    for(int a = 0; a < ARRAYSIZE / 2; a++){
+        
+        int temp = arr[a];
+        
+        arr[a] = arr[ARRAYSIZE - 1 - a];
+        
+        arr[ARRAYSIZE - 1 - a] = temp;
+    }
+    
+    return arr;
+}
+
+
+
 void task1(){
     
-    cout << "Enter 10 integers: ";
+    cout << "Enter 10 integers: " << endl;
     
-    int arr[10];
+    const int ARRAYSIZE = 11;
     
-    for(int a = 0; a < 10; a++) 
+    int arr[ARRAYSIZE];
+    
+    for(int a = 0; a < ARRAYSIZE; a++){
+        
         cin >> arr[a];
         
-    cout << "Ascending: ";
+    }
+
+    cout << "Ascending: " << endl;
     
-    sort(arr, arr + 10);
+    int* arr2 = sortArray(arr, ARRAYSIZE);
     
-    for(int a = 0; a < 10; a++) {
+    for(int a = 0; a < ARRAYSIZE; a++) {
         
-    cout << arr[a];
+    cout << arr2[a];
     
-    if(a != 9) cout << ", ";
+    if(a != ARRAYSIZE-1) cout << ", ";
     
     }
     
     cout << endl;
         
-    cout << "Decending: ";
+    cout << "Decending: " << endl;
     
-    reverse(arr, arr + 10);
+    arr2 = reverseArray(arr2, ARRAYSIZE);
     
-    for(int a = 0; a < 10; a++) {
+    for(int a = 0; a < ARRAYSIZE; a++) {
         
-    cout << arr[a];
+    cout << arr2[a];
     
-    if(a != 9) cout << ", ";
+    if(a != ARRAYSIZE-1) cout << ", ";
     
     }
     
     cout << endl;    
         
-        
-    
 }
 
 
@@ -72,7 +112,6 @@ int main()
     
     return 0;
 }
-
 
 
 

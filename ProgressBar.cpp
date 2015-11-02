@@ -1,6 +1,6 @@
 
 
-#include "stdafx.h"
+#include "stdafx.h" // for visual studio
 #include <iostream>
 #include <string>
 #include <windows.h>
@@ -21,24 +21,30 @@ public:
 
 		return max;
 
-	}
-
+	};
+	
 	int getPercent(){
 
 		return (progress / max) * 100;
 
-	}
+	};
+
+	int getLength(){
+
+		return length;
+
+	};
 
 	void setMax(int _max){
-		
+
 		max = _max;
-		
+
 	};
 
 	void setProgress(int value){
 
 		if (value < max)
-		progress = value;
+			progress = value;
 
 	};
 
@@ -49,28 +55,36 @@ public:
 		SetConsoleTextAttribute(hConsole, color);
 
 	};
+	
+	void setLength(int _length){
+
+		length = _length;
+
+	};
 
 	void render(){
 
 		cout << "|";
-		
-		for (int a = 0; a < max / 10; a++) {
 
-			if (a > progress / 10)
+		for (int a = 0; a < length; a++) {
+
+			if (a > progress / max * length)
 				cout << "=";
 			else
 				cout << "#";
 		}
 
-		cout << "|" << endl;
+		cout << "|";  << endl;
 
 	};
+
 
 
 private:
 
 	int progress = 0;
 	double max = 100.0;
+	int length = 25;
 
 };
 
@@ -102,23 +116,20 @@ int _tmain(int argc, _TCHAR* argv[])
 	ProgressBar bar;
 
 	bar.setMax(220);
+	bar.setLength(35); 
 
 	for (int k = 0; k < bar.getMax(); k++)
 	{
 		bar.setProgress(k);
 		bar.render();
 
-
-		cout << bar.getMax() << endl;
-		cout << bar.getProgress() << endl;
 		cout << bar.getPercent() << "%" << endl;
 
 		Sleep(10);
 
 		system("cls");
 	}
-	
-	
+
+
 	return 0;
 }
-
